@@ -60,6 +60,7 @@ router.post('/login', async (req, res) => {
       (err, token) => {
         if (err) throw err;
         res.json({ token, designation: user.designation });
+        res.status(201);
       }
     );
   } catch (err) {
