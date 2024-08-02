@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import userRoutes from './routes/users.js';
 import questionRoutes from './routes/questions.js';
+import uploadRoutes from './routes/upload.js';
 import { MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv'
 
@@ -41,6 +42,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api', uploadRoutes);
 
 // Example route using MongoClient
 app.get('/api/movie', async (req, res) => {
@@ -56,5 +58,5 @@ app.get('/api/movie', async (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
