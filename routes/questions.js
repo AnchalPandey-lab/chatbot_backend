@@ -1,10 +1,11 @@
 import express from 'express';
 import Question from '../models/Question.js';
+import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get all questions
-router.get('/', async (req, res) => {
+// Get all questions (Protected)
+router.get('/', auth, async (req, res) => {
     try {
         const questions = await Question.find();
         res.json(questions);
@@ -13,8 +14,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Create a new question
-router.post('/', async (req, res) => {
+// Create a new question (Protected)
+router.post('/', auth, async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
@@ -37,8 +38,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update a question
-router.patch('/:id', async (req, res) => {
+// Update a question (Protected)
+router.patch('/:id', auth, async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
@@ -72,8 +73,8 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
-// Delete a question
-router.delete('/:id', async (req, res) => {
+// Delete a question (Protected)
+router.delete('/:id', auth, async (req, res) => {
     try {
         const question = await Question.findById(req.params.id);
         if (!question) {
