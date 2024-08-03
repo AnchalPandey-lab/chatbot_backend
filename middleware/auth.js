@@ -1,21 +1,22 @@
+// middleware/auth.js
 import jwt from 'jsonwebtoken';
+import User from '../models/Users.js';
 
-const auth = (req, res, next) => {
-  // Get the token from the header
-  const token = req.header('x-auth-token');
-
-  // Check if no token
-  if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
-  }
-
-  // Verify token
+const auth = async (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
+  
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded.user;
+    const user = await User.findById(decoded.user.id);
+    
+    if (!user) {
+      throw new Error();
+    }
+    
+    req.user = user;  // Attach user to the request object
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+    res.status(401).json({ msg: 'Please authenticate' });
   }
 };
 

@@ -3,6 +3,8 @@ import multer from 'multer';
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import dotenv from 'dotenv';
+import auth from '../middleware/auth.js';
+import { checkRole } from '../middleware/checkRole.js';
 
 dotenv.config();
 
@@ -42,7 +44,8 @@ const uploadFile = async (file) => {
     }
 };
 
-router.post('/upload/csv', upload.single('file'), async (req, res) => {
+// Apply both auth and checkRole middleware
+router.post('/upload/csv', auth, checkRole('Super Admin'), upload.single('file'), async (req, res) => {
     try {
         await uploadFile(req.file);
         res.status(200).send('File uploaded successfully');
