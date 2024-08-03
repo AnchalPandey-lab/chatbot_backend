@@ -31,7 +31,9 @@ router.post('/', async (req, res) => {
 
     try {
         const newQuestion = await question.save();
-        res.status(201).json(newQuestion);
+        if(newQuestion) {
+            res.status(201).send('Feedback submitted successfully');
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
