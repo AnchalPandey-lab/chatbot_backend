@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
     user.Password = await bcrypt.hash(Password, salt);
 
     await user.save();
-    res.send('User registered successfully');
+    res.status(200).send('User registered successfully');
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, role: user.Role });
+        res.json({ token, role: user.Role, name: user.First_Name });
       }
     );
   } catch (err) {

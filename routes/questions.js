@@ -19,7 +19,7 @@ router.post('/', auth, async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
-    if (feedback < 1 || feedback > 5) {
+    if (feedback < 0 || feedback > 5) {
         return res.status(400).json({ message: 'Feedback must be between 1 and 5' });
     }
 
@@ -32,7 +32,9 @@ router.post('/', auth, async (req, res) => {
 
     try {
         const newQuestion = await question.save();
-        res.status(201).json(newQuestion);
+        if(newQuestion) {
+            res.status(201).send('Feedback submitted successfully');
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
@@ -43,7 +45,7 @@ router.patch('/:id', auth, async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
-    if (feedback && (feedback < 1 || feedback > 5)) {
+    if (feedback && (feedback < 0 || feedback > 5)) {
         return res.status(400).json({ message: 'Feedback must be between 1 and 5' });
     }
 
