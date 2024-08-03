@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
-    if (feedback < 1 || feedback > 5) {
+    if (feedback < 0 || feedback > 5) {
         return res.status(400).json({ message: 'Feedback must be between 1 and 5' });
     }
 
@@ -42,7 +42,7 @@ router.patch('/:id', async (req, res) => {
     const { name, askedQuestion, answer, feedback } = req.body;
 
     // Validate feedback
-    if (feedback && (feedback < 1 || feedback > 5)) {
+    if (feedback && (feedback < 0 || feedback > 5)) {
         return res.status(400).json({ message: 'Feedback must be between 1 and 5' });
     }
 

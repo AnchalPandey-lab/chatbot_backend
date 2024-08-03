@@ -44,19 +44,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api', uploadRoutes);
 
-// Example route using MongoClient
-app.get('/api/movie', async (req, res) => {
-    try {
-        const movies = req.db.collection('movies');
-        const query = { title: 'Back to the Future' };
-        const movie = await movies.findOne(query);
-        res.json(movie);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Server error');
-    }
-});
-
 // Start server
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
