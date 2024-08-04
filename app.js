@@ -7,6 +7,8 @@ import questionRoutes from './routes/questions.js';
 import uploadRoutes from './routes/upload.js';
 import { MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv'
+import auth from './middleware/auth.js';
+import cookieParser from 'cookie-parser';
 
 
 // Load environment variables from .env file
@@ -16,7 +18,11 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cookieParser()); // Add cookie-parser middleware for authentication
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,  
+  }));
 
 // Connect to MongoDB with Mongoose
 mongoose.connect(process.env.MONGO_URI)
@@ -41,8 +47,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/users', userRoutes);
-app.use('/api/questions', questionRoutes);
-app.use('/api', uploadRoutes);
+app.use('/api/questions',auth, questionRoutes);
+app.use('/api',auth, uploadRoutes);
 
 // Start server
 const PORT = process.env.PORT;
